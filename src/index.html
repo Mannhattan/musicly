@@ -6,6 +6,34 @@
 		<title>musicly</title>
 	</head>
 	<body>
-		<h1 id="start"></h1>
+		<section class="player">
+			<!-- <div class="player__album">
+				<img src="./images/acdc.JPG" alt="">
+			</div> -->
+
+			<audio id="player__audio"></audio>
+
+			<div class="player__controls">
+				<!-- <audio id="visualizer__audio" class="visualizer__audio"></audio> -->
+
+				<canvas id="control__visualizer" class="control__visualizer"></canvas>
+
+				<div class="control__timeline" data-currentTime="" data-duration="">
+					<div class="timeline__progress"></div>
+					<div class="timeline__dot"></div>
+				</div>
+
+				<div class="control__wrapper">
+					<a href="" class="control control-previous"><i class="fas fa-backward"></i></a>
+					<a href="" class="control control-play"><i class="fas fa-play"></i></a>
+					<a href="" class="control control-stop"><i class="fas fa-stop"></i></a>
+					<a href="" class="control control-next"><i class="fas fa-forward"></i></a>
+				</div>
+			</div>
+		</section>
+
+		<section class="playlist">
+
+		</section>
 	</body>
 </html>
