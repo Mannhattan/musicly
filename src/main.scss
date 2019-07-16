@@ -16,7 +16,18 @@ body {
     align-items: center;
     overflow: hidden;
 
-    background: #fe8c00;
+    background: #8E2DE2;
+    background: #8E2DE2;  /* fallback for old browsers */
+// background: -webkit-linear-gradient(50deg, #4A00E0, #8E2DE2);  /* Chrome 10-25, Safari 5.1-6 */
+// background: linear-gradient(50deg, #4A00E0, #8E2DE2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+background: rgb(142,45,226); /* Old browsers */
+background: -moz-linear-gradient(left, rgba(142,45,226,1) 0%, rgba(74,0,224,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left, rgba(142,45,226,1) 0%,rgba(74,0,224,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right, rgba(142,45,226,1) 0%,rgba(74,0,224,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+
     // background: -webkit-linear-gradient(90deg, #f83600, #fe8c00);
     // background: linear-gradient(90deg, #f83600, #fe8c00);
 
@@ -26,18 +37,23 @@ body {
 }
 
 section.player {
-    width: 70%;
+    width: 100%;
     height: 100vh;
     position: relative;
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-end;
     align-content: center;
     align-items: center;
 
     // background: #131646;
+
+    canvas.player__visualizer {
+        margin-bottom: 120px;
+    }
 
     div.player__album {
         width: 300px;
@@ -53,7 +69,7 @@ section.player {
 
     div.player__controls {
         width: 100%;
-        height: auto;
+        height: 120px;
         position: absolute;
         bottom: 0;
         left: 0;
@@ -66,11 +82,6 @@ section.player {
         justify-content: center;
         align-content: center;
         align-items: center;
-
-        canvas.control__visualizer {
-            width: 100%;
-            height: 200px;
-        }
 
         div.control__timeline {
             width: 100%;
@@ -119,8 +130,9 @@ section.player {
 
         div.control__wrapper {
             width: 100%;
-            height: auto;
-            margin: 30px 0;
+            height: 120px;
+            // margin: 30px 0;
+            border-top: 1px solid rgb(175, 175, 175);
 
             display: flex;
             flex-direction: row;
@@ -153,7 +165,7 @@ section.player {
 }
 
 section.playlist {
-    width: 30%;
+    // width: 30%;
     height: 100vh;
 
     background: #fff;

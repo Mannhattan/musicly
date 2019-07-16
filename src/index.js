@@ -2,7 +2,9 @@ import style from "./main.scss";
 
 import script from './fontawesome';
 
-import song from './songs/paradise.mp3';
+import song from './songs/Valence - Infinite [NCS Release].mp3';
+
+
 
 window.onload = function() {
     var audio = document.getElementById("player__audio");
@@ -17,30 +19,37 @@ window.onload = function() {
             audio.pause();
             document.getElementsByClassName("control-play")[0].innerHTML = "<i class='fas fa-play'></i>";
         }
-    }); 
+    });
 
-    loadSong();
+    var canvas = document.getElementById("player__visualizer");
+    canvas.width = window.innerWidth;
+    canvas.height = 400;
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = 400;
+    }, false );
+
+    loadSong(canvas, song);
 };
 
-const loadSong = (songName) => {
+const loadSong = (canvas, songName) => {
     var audio = document.getElementById("player__audio");
 
-    audio.src = song;
+    audio.src = songName;
     audio.load();
     // audio.play();
     var context = new AudioContext();
     var src = context.createMediaElementSource(audio);
     var analyser = context.createAnalyser();
 
-    var canvas = document.getElementById("control__visualizer");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
     var ctx = canvas.getContext("2d");
 
     src.connect(analyser);
     analyser.connect(context.destination);
 
     analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.92;
 
     var bufferLength = analyser.frequencyBinCount;
     // console.log(bufferLength);
@@ -54,38 +63,39 @@ const loadSong = (songName) => {
     var barHeight;
     var x = 0;
 
-    function renderFrame() {
+    const renderFrame = () => {
+        // console.log(audio.currentTime + "   " + audio.duration);
         requestAnimationFrame(renderFrame);
 
         x = 0;
 
         analyser.getByteFrequencyData(dataArray);
 
-        // ctx.fillStyle = "#f83600";
-
-        // var grd = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-        // grd.addColorStop(1, "#fe8c00");
-        // grd.addColorStop(0, "#f83600");
-
-        // ctx.fillStyle = grd;
-        ctx.fillStyle = "#fe8c00";
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for (var i = 0; i < bufferLength; i++) {
-            barHeight = dataArray[i]*4;
+            // barHeight = (dataArray[i] == 255 ? dataArray[i]*1.2 : dataArray[i]);
+            barHeight = dataArray[i] /2 + 5;
+
+            const r=224;
+            const g=224;
+            const b=224;
+
+            if (audio.currentTime/audio.duration > x/window.innerWidth) {
+                r=255;
+                g=255;
+                b=255;
+            }
             
             // var r = barHeight + (25 * (i/bufferLength));
             // var g = 250 * (i/bufferLength);
             // var b = 50;
 
-            const r=255;
-            const g=255;
-            const b=255;
+            
 
             ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
             ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
 
-            // x += barWidth + 1;
             x += barWidth - 1;
         }
 
@@ -105,14 +115,18 @@ const updateTimeline = (audio) => {
     var durationMinutes = parseInt(audio.duration / 60, 10);
     var durationSeconds = parseInt(audio.duration % 60);
 
-    document.getElementsByClassName("control__timeline")[0].setAttribute("data-currentTime", currentMinutes+":"+currentSeconds);
-    document.getElementsByClassName("control__timeline")[0].setAttribute("data-duration", durationMinutes+":"+durationSeconds);
+    // document.getElementsByClassName("control__timeline")[0].setAttribute("data-currentTime", currentMinutes+":"+currentSeconds);
+    // document.getElementsByClassName("control__timeline")[0].setAttribute("data-duration", durationMinutes+":"+durationSeconds);
 
-    document.getElementsByClassName("timeline__progress")[0].style = `width: ${(audio.currentTime / audio.duration) * 100}%`;
-    document.getElementsByClassName("timeline__dot")[0].style = `left: ${(audio.currentTime / audio.duration) * 99.7}%`;
+    // document.getElementsByClassName("timeline__progress")[0].style = `width: ${(audio.currentTime / audio.duration) * 100}%`;
+    // document.getElementsByClassName("timeline__dot")[0].style = `left: ${(audio.currentTime / audio.duration) * 99.7}%`;
+
+    if(audio.currentTime == audio.duration) {
+        document.getElementsByClassName("control-play")[0].innerHTML = "<i class='fas fa-play'></i>";
+    }
 }
 
 //check for ES6
-const arr = [1, 2, 3];
-const iAmJavascriptES6 = () => console.log(...arr);
-iAmJavascriptES6();
+// const arr = [1, 2, 3];
+// const iAmJavascriptES6 = () => console.log(...arr);
+// iAmJavascriptES6();
